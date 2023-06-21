@@ -1,10 +1,15 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
+import { wrapper } from '../store';
+import { Provider } from 'react-redux';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, ...rest }: AppProps) {
+  const { store, props } = wrapper.useWrappedStore(rest);
   return (
     <React.Fragment>
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Component {...props.pageProps} />
+      </Provider>
     </React.Fragment>
   );
 }

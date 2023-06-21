@@ -15,6 +15,12 @@
     "electron-store": "^8.1.0"
   },
   "devDependencies": {
+    "@ant-design/icons": "^5.0.1",
+    "antd": "^5.4.7",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@types/redux-logger": "^3.0.9",
+    "redux-logger": "^3.0.6",
+    "react-redux": "^8.0.5",
     "@emotion/babel-plugin": "^11.10.2",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
@@ -23,6 +29,7 @@
     "electron": "^21.3.3",
     "electron-builder": "^23.6.0",
     "next": "^12.3.4",
+    "next-redux-wrapper": "^8.1.0",
     "nextron": "^8.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
