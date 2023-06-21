@@ -75,6 +75,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
       contextIsolation: false,
       ...options.webPreferences,
     },
+    icon: './renderer/public/logo.png'
   };
   win = new BrowserWindow(browserOptions);
 

@@ -8,6 +8,9 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head>
           <meta charSet="utf-8" />
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
+          <title>Dohyun - Nextron - App</title>
+          <link rel="shortcut icon" href="/logo.png" />
         </Head>
         <Global
           styles={css`
@@ -19,7 +22,7 @@ class MyDocument extends Document {
 
             body {
               padding: 2rem 4rem;
-              background: papayawhip;
+              background: black;
               font-family: Helvetica, Arial, sans-serif;
               font-size: 24px;
             }

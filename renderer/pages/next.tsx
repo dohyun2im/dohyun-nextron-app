@@ -8,9 +8,6 @@ import { bounce, AnimatedCard } from '../components/AnimatedCard';
 function Next() {
   return (
     <React.Fragment>
-      <Head>
-        <title>Next - Nextron (with-typescript-emotion)</title>
-      </Head>
       <div>
         <TitleCard>Nextron with Emotion</TitleCard>
         <BasicCard>
