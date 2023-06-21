@@ -1,5 +1,5 @@
 appId: com.example.nextron
-productName: My Nextron App
+productName: Dohyun-Nextron-App
 copyright: Copyright © 2018 Yoshihide Shiono
 directories:
   output: dist
@@ -10,3 +10,11 @@ files:
       - package.json
       - app
 publish: null
+
+mac:
+  target: dmg
+  icon: './renderer/public/logo.icns'
+
+win:
+  target: nsis
+  icon: './renderer/public/logo.png'

@@ -75,8 +75,11 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
       contextIsolation: false,
       ...options.webPreferences,
     },
-    icon: './renderer/public/logo.png'
+    icon: './renderer/public/logo.png',
+    roundedCorners: true,
+    autoHideMenuBar: true,
   };
+
   win = new BrowserWindow(browserOptions);
 
   win.on('close', saveState);
