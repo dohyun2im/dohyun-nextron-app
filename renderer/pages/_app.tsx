@@ -1,14 +1,17 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
-import { wrapper } from '../store';
+import { persistor, wrapper } from '../store';
 import { Provider } from 'react-redux';
+import { PersistGate } from "redux-persist/integration/react";
 
 function MyApp({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
   return (
     <React.Fragment>
       <Provider store={store}>
-        <Component {...props.pageProps} />
+        <PersistGate persistor={persistor} loading={null}>
+          <Component {...props.pageProps} />
+        </PersistGate>
       </Provider>
     </React.Fragment>
   );

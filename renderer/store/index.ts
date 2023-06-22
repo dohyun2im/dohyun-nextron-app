@@ -2,6 +2,14 @@ import { combineReducers, configureStore, PayloadAction, ThunkAction, Action } f
 import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
 import { todoSlice } from '../slice/todo';
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
 
 const reducer = (state: any, action: PayloadAction<any>) => {
   return combineReducers({
@@ -9,13 +17,21 @@ const reducer = (state: any, action: PayloadAction<any>) => {
   })(state, action);
 };
 
+const persistedReducer = persistReducer(persistConfig, reducer);
+
 const makeStore = () =>
   configureStore({
-    reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-  });
+    reducer: persistedReducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+            }
+        }).concat(logger),
+});
 
 const store = makeStore();
+export const persistor = persistStore(store);
 
 export const wrapper = createWrapper<AppStore>(makeStore, {
   debug: process.env.NODE_ENV === 'development',
