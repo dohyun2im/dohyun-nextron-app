@@ -1,6 +1,6 @@
 appId: com.example.nextron
-productName: Dohyun-Nextron-App
-copyright: Copyright © 2018 Yoshihide Shiono
+productName: dohyun-app
+copyright: dohyun2im
 directories:
   output: dist
   buildResources: resources

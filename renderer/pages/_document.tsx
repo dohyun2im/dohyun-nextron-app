@@ -6,15 +6,11 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
-          <meta charSet="utf-8" />
-          <meta name='viewport' content='width=device-width, initial-scale=1' />
-          <title>Dohyun - Nextron - App</title>
-          <link rel="shortcut icon" href="/logo.png" />
-        </Head>
+        <Head />
         <Global
           styles={css`
-            html, body {
+            html,
+            body {
               margin: 0;
               padding: 0;
               min-height: 100%;
@@ -22,7 +18,7 @@ class MyDocument extends Document {
 
             body {
               padding: 2rem 4rem;
-              background: black;
+              background: white;
               font-family: Helvetica, Arial, sans-serif;
               font-size: 24px;
             }

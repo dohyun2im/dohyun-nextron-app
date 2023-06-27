@@ -1,25 +1,23 @@
 import React from 'react';
-import Link from 'next/link';
-import { BasicCard } from '../components/BasicCard';
-import { TitleCard } from '../components/TitleCard';
-import { HoverableCard } from '../components/HoverableCard';
+import Store from 'electron-store';
+import { Input } from 'antd';
 
 function Home() {
+  const store = new Store({ name: 'token' });
+  console.log(store.get('token'));
+  console.log(process.env.NEXT_PUBLIC_ENV_FIREBASE_APP_KEY);
+
+  const setStore = (e: any) => {
+    store.set('token', e.target.value);
+  };
+
   return (
     <React.Fragment>
       <div>
-        <TitleCard>Nextron with Emotion</TitleCard>
-        <BasicCard>
-          <Link href="/next">
-            <a>Go to next page</a>
-          </Link>
-        </BasicCard>
-        <HoverableCard>
-          With <code>:hover</code>.
-        </HoverableCard>
+        <Input onChange={setStore} />
       </div>
     </React.Fragment>
   );
-};
+}
 
 export default Home;

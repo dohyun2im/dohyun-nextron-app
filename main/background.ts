@@ -1,6 +1,9 @@
 import { app, screen } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
@@ -12,7 +15,7 @@ if (isProd) {
 
 (async () => {
   await app.whenReady();
-  
+
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   const mainWindow = createWindow('main', {
