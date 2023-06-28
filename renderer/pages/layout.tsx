@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { auth } from '../firebase/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const TopWrapper = styled.div`
   width: 100vw;
@@ -30,14 +32,23 @@ const BottomBorder = styled.span`
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const [user, setUser] = useState<boolean>(false);
   const handleRouter = (route: string) => {
     router.push(`/${route}`);
   };
 
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(true);
+    } else {
+      setUser(false);
+    }
+  });
+
   return (
     <>
       <TopWrapper>{children}</TopWrapper>
-      {false ? (
+      {user ? (
         <BottomWrapper>
           <BottomItem
             onClick={() => {
