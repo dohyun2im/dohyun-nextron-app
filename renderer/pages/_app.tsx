@@ -1,6 +1,8 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import AppLayout from './layout';
+import { ConfigProvider } from 'antd';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -8,7 +10,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Dohyun - Nextron - App</title>
       </Head>
-      <Component {...pageProps} />
+      <ConfigProvider theme={{ token: { colorPrimary: 'black' } }}>
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
+      </ConfigProvider>
     </React.Fragment>
   );
 }

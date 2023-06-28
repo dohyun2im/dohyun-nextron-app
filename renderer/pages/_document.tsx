@@ -14,13 +14,13 @@ class MyDocument extends Document {
               margin: 0;
               padding: 0;
               min-height: 100%;
+              overflow: hidden;
             }
 
             body {
-              padding: 2rem 4rem;
-              background: white;
+              background: #222222;
+              color: #ffffff;
               font-family: Helvetica, Arial, sans-serif;
-              font-size: 24px;
             }
           `}
         />

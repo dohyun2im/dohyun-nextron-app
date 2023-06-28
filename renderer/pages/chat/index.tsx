@@ -1,12 +1,10 @@
 import React from 'react';
 import { Input } from 'antd';
 
-export default function Home() {
+export default function Chat() {
   return (
     <React.Fragment>
-      <div>
-        <Input />
-      </div>
+      <div>Chat</div>
     </React.Fragment>
   );
 }
