@@ -1,12 +1,17 @@
-import React from 'react';
-import { Input } from 'antd';
+import React, { useEffect } from 'react';
+import { auth } from '../firebase/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useRouter } from 'next/router';
 
 export default function Home() {
-  return (
-    <React.Fragment>
-      <div>
-        <Input />
-      </div>
-    </React.Fragment>
-  );
+  const router = useRouter();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) router.push('/teams');
+      else router.push('/signin');
+    });
+  }, [auth]);
+
+  return <React.Fragment />;
 }

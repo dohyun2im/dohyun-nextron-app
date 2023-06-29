@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Dohyun - Nextron - App</title>
       </Head>
-      <ConfigProvider theme={{ token: { colorPrimary: 'black' } }}>
+      <ConfigProvider theme={{ token: { colorPrimary: 'gray' } }}>
         <AppLayout>
           <Component {...pageProps} />
         </AppLayout>

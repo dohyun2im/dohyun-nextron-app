@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { auth } from '../../firebase/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 
 const HeaderWrapper = styled.div`
   text-align: center;
@@ -54,6 +54,17 @@ export default function SignIn() {
           break;
       }
     }
+  };
+
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        router.push('/teams');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <React.Fragment>

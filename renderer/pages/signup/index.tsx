@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { CheckOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
 
@@ -36,13 +36,13 @@ export default function SignUp() {
     messageApi.destroy();
     messageApi.error(m);
   };
-
+  sendEmailVerification;
   const onFinish = async (values: any): Promise<void> => {
     setButton(true);
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       form.resetFields();
-      router.push('/signin');
+      router.push('/teams');
     } catch (err) {
       setButton(false);
       switch (err.code) {

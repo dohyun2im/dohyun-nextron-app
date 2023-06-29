@@ -19,7 +19,7 @@ if (isProd) {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   const mainWindow = createWindow('main', {
-    width: 600,
+    width: 500,
     height: height,
     x: width - 600,
     y: 0,
