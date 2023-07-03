@@ -43,6 +43,9 @@ const CheckState = styled(Checkbox)`
 
 const DatePick = styled(DatePicker)`
   border: none;
+  .ant-picker-focused {
+    border: none !important;
+  }
 `;
 
 const PlusIcon = styled(PlusOutlined)`
@@ -56,17 +59,17 @@ const DeleteIcon = styled(DeleteOutlined)`
   margin-bottom: 3px;
 `;
 
-export default function Teams() {
+export default function Todo() {
   const [input, setInput] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [contents, setContents] = useState<any[]>([]);
 
-  const inputOnChange = (e: any) => {
+  const inputOnChange = (e: any): void => {
     setInput(e.target.value);
   };
 
-  const plusOnClick = () => {
-    addDoc(collection(fireStore, 'contents'), {
+  const plusOnClick = async (): Promise<void> => {
+    await addDoc(collection(fireStore, 'contents'), {
       title: input,
       date: date,
       state: false,
@@ -76,17 +79,17 @@ export default function Teams() {
     });
   };
 
-  const getContents = async () => {
+  const getContents = async (): Promise<void> => {
     await getDocs(collection(fireStore, 'contents')).then((result) => {
       setContents(result.docs);
     });
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string): Promise<void> => {
     await deleteDoc(doc(fireStore, 'contents', id)).then(() => getContents());
   };
 
-  const handleUpdate = async (id: string, state:boolean) => {
+  const handleUpdate = async (id: string, state: boolean): Promise<void> => {
     await updateDoc(doc(fireStore, 'contents', id), { state: !state }).then(() => getContents());
     setInput('');
   };
@@ -98,16 +101,17 @@ export default function Teams() {
   useEffect(() => {
     getContents();
   }, []);
+
   return (
     <React.Fragment>
       <InputWrapper>
         <TeamsInput
           value={input}
+          placeholder="Add To do"
           onChange={inputOnChange}
           addonBefore={<DatePick onChange={onChange} />}
           addonAfter={<PlusIcon onClick={plusOnClick} />}
         />
-
         {contents &&
           contents.map((c, i) => (
             <ContentWrapper key={i}>
@@ -119,7 +123,6 @@ export default function Teams() {
               <DeleteIcon onClick={() => handleDelete(c.id as string)} />
             </ContentWrapper>
           ))}
-
       </InputWrapper>
     </React.Fragment>
   );

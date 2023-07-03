@@ -3,19 +3,26 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { auth } from '../firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { LoginOutlined, LogoutOutlined, UnorderedListOutlined, UserAddOutlined } from '@ant-design/icons';
+import { LoginOutlined, LogoutOutlined, UnorderedListOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 
 const TopWrapper = styled.div`
   width: 100vw;
-  height: 93vh;
+  height: 95vh;
 `;
 
 const BottomWrapper = styled.div`
   width: 100vw;
-  height: 7vh;
+  height: 5vh;
   border-top: 1px solid #eee;
   display: flex;
   align-items: center;
+`;
+
+const Header = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  padding: 10px;
 `;
 
 const BottomItem = styled.span`
@@ -26,8 +33,16 @@ const BottomItem = styled.span`
   text-align: center;
 `;
 
+const LoggedInBottomItem = styled.span`
+  width: 33.3%;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+`;
+
 const BottomBorder = styled.span`
-  height: 7vh;
+  height: 5vh;
   border-left: 1px solid #eee;
 `;
 
@@ -55,20 +70,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <TopWrapper>{children}</TopWrapper>
+      <TopWrapper>
+        <Header>{auth.currentUser.email.split('@')[0]} 님 . </Header>
+        {children}
+      </TopWrapper>
       {user ? (
         <BottomWrapper>
-          <BottomItem
+          <LoggedInBottomItem
+            onClick={() => {
+              handleRouter('teams');
+            }}
+          >
+            <UserOutlined /> Teams
+          </LoggedInBottomItem>
+          <BottomBorder />
+          <LoggedInBottomItem
             onClick={() => {
               handleRouter('todo');
             }}
           >
             <UnorderedListOutlined /> Todo
-          </BottomItem>
+          </LoggedInBottomItem>
           <BottomBorder />
-          <BottomItem onClick={onLogOutClick}>
+          <LoggedInBottomItem onClick={onLogOutClick}>
             <LogoutOutlined /> Logout
-          </BottomItem>
+          </LoggedInBottomItem>
         </BottomWrapper>
       ) : (
         <BottomWrapper>
