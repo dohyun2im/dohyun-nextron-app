@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { auth } from '../firebase/firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { CommentOutlined, HomeOutlined, LoginOutlined, LogoutOutlined, UserAddOutlined } from '@ant-design/icons';
+import { onAuthStateChanged } from 'firebase/auth';
+import { LoginOutlined, LogoutOutlined, UnorderedListOutlined, UserAddOutlined } from '@ant-design/icons';
 
 const TopWrapper = styled.div`
   width: 100vw;
@@ -20,15 +20,7 @@ const BottomWrapper = styled.div`
 
 const BottomItem = styled.span`
   width: 50%;
-  font-size: 20px;
-  font-weight: 500;
-  color: white;
-  text-align: center;
-`;
-
-const LoginBottomItem = styled.span`
-  width: 33.3%;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   color: white;
   text-align: center;
@@ -47,7 +39,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   };
 
   const onLogOutClick = () => {
-    console.log('logout');
     auth.signOut();
     router.push('/signin');
   };
@@ -67,25 +58,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <TopWrapper>{children}</TopWrapper>
       {user ? (
         <BottomWrapper>
-          <LoginBottomItem
+          <BottomItem
             onClick={() => {
-              handleRouter('teams');
+              handleRouter('todo');
             }}
           >
-            <HomeOutlined /> Teams
-          </LoginBottomItem>
+            <UnorderedListOutlined /> Todo
+          </BottomItem>
           <BottomBorder />
-          <LoginBottomItem
-            onClick={() => {
-              handleRouter('chat');
-            }}
-          >
-            <CommentOutlined /> Chat
-          </LoginBottomItem>
-          <BottomBorder />
-          <LoginBottomItem onClick={onLogOutClick}>
+          <BottomItem onClick={onLogOutClick}>
             <LogoutOutlined /> Logout
-          </LoginBottomItem>
+          </BottomItem>
         </BottomWrapper>
       ) : (
         <BottomWrapper>

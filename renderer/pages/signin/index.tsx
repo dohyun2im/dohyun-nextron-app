@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { auth } from '../../firebase/firebase';
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import Store from 'electron-store';
 
 const HeaderWrapper = styled.div`
   text-align: center;
@@ -30,7 +30,6 @@ export default function SignIn() {
   const [form] = Form.useForm();
   const [button, setButton] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const router = useRouter();
 
   const errorMsg = (m: string) => {
     messageApi.destroy();
@@ -41,8 +40,10 @@ export default function SignIn() {
     setButton(true);
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
+      const store = new Store();
+      store.set('email',values.email as string);
+      store.set('pw', values.password as string);
       form.resetFields();
-      router.push('/teams');
     } catch (err) {
       setButton(false);
       switch (err.code) {
@@ -56,16 +57,6 @@ export default function SignIn() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((data) => {
-        router.push('/teams');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <React.Fragment>
       {contextHolder}

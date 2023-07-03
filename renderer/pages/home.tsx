@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) router.push('/teams');
+      if (user) router.push('/todo');
       else router.push('/signin');
     });
   }, [auth]);

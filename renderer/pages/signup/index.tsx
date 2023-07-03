@@ -36,13 +36,15 @@ export default function SignUp() {
     messageApi.destroy();
     messageApi.error(m);
   };
-  sendEmailVerification;
+
   const onFinish = async (values: any): Promise<void> => {
     setButton(true);
     try {
-      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const { user } = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      await sendEmailVerification(user);
+      auth.signOut();
       form.resetFields();
-      router.push('/teams');
+      router.push('/signin');
     } catch (err) {
       setButton(false);
       switch (err.code) {
