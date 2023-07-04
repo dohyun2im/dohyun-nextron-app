@@ -3,8 +3,9 @@ import { Button, Form, Input, message } from 'antd';
 import { CheckOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { auth } from '../../firebase/firebase';
+import { auth, fireStore } from '../../firebase/firebase';
 import { useRouter } from 'next/router';
+import { addDoc, collection } from 'firebase/firestore';
 
 const HeaderWrapper = styled.div`
   text-align: center;
@@ -40,11 +41,11 @@ export default function SignUp() {
   const onFinish = async (values: any): Promise<void> => {
     setButton(true);
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, values.email, values.password);
-      await sendEmailVerification(user);
-      auth.signOut();
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      await addDoc(collection(fireStore, 'users'), {
+        name: values.email as string,
+      });
       form.resetFields();
-      router.push('/signin');
     } catch (err) {
       setButton(false);
       switch (err.code) {

@@ -2,12 +2,13 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { Checkbox, DatePicker, DatePickerProps, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { fireStore } from '../../firebase/firebase';
+import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import dayjs from 'dayjs';
 
 const InputWrapper = styled.div`
   padding: 10px;
+  overflow-y: auto;
 `;
 
 const ContentWrapper = styled.div`
@@ -18,8 +19,9 @@ const ContentWrapper = styled.div`
 `;
 
 const DateWrapper = styled.div`
-  width: 110px;
+  min-width: 250px;
   display: flex;
+  justify-content: space-between;
 `;
 
 const Content = styled.div<{ state: boolean }>`
@@ -61,7 +63,7 @@ const DeleteIcon = styled(DeleteOutlined)`
 
 export default function Todo() {
   const [input, setInput] = useState<string>('');
-  const [date, setDate] = useState<string>('');
+  const [date, setDate] = useState<string>(dayjs(new Date()).format('YYYY-MM-DD'));
   const [contents, setContents] = useState<any[]>([]);
 
   const inputOnChange = (e: any): void => {
@@ -71,6 +73,7 @@ export default function Todo() {
   const plusOnClick = async (): Promise<void> => {
     await addDoc(collection(fireStore, 'contents'), {
       title: input,
+      name: auth.currentUser.email,
       date: date,
       state: false,
     }).then((result) => {
@@ -109,15 +112,18 @@ export default function Todo() {
           value={input}
           placeholder="Add To do"
           onChange={inputOnChange}
+          onPressEnter={plusOnClick}
           addonBefore={<DatePick onChange={onChange} />}
           addonAfter={<PlusIcon onClick={plusOnClick} />}
         />
+
         {contents &&
           contents.map((c, i) => (
             <ContentWrapper key={i}>
               <DateWrapper>
                 <CheckState onClick={() => handleUpdate(c.id as string, c.data().state)} checked={c.data().state} />
                 <Content state={c.data().state}>{dayjs(c.data().date).format('YY-MM-DD')}</Content>
+                <Content state={c.data().state}>{c.data().name?.split('@')[0]}</Content>
               </DateWrapper>
               <Content state={c.data().state}>{c.data().title}</Content>
               <DeleteIcon onClick={() => handleDelete(c.id as string)} />

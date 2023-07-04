@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { auth } from '../firebase/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { LoginOutlined, LogoutOutlined, UnorderedListOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
 
 const TopWrapper = styled.div`
@@ -71,7 +71,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <TopWrapper>
-        <Header>{auth.currentUser.email.split('@')[0]} 님 . </Header>
+        {user && <Header>{auth.currentUser.email.split('@')[0]} 님 . </Header>}
         {children}
       </TopWrapper>
       {user ? (
