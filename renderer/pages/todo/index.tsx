@@ -16,10 +16,17 @@ const ContentWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 15px;
+`;
+
+const EmailWrapper = styled.div`
+  min-width: 260px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const DateWrapper = styled.div`
-  min-width: 250px;
+  min-width: 90px;
   display: flex;
   justify-content: space-between;
 `;
@@ -63,6 +70,7 @@ const DeleteIcon = styled(DeleteOutlined)`
 
 export default function Todo() {
   const [input, setInput] = useState<string>('');
+  const [friends, setFriends] = useState<string[]>([]);
   const [date, setDate] = useState<string>(dayjs(new Date()).format('YYYY-MM-DD'));
   const [contents, setContents] = useState<any[]>([]);
 
@@ -70,7 +78,7 @@ export default function Todo() {
     setInput(e.target.value);
   };
 
-  const plusOnClick = async (): Promise<void> => {
+  const addContents = async (): Promise<void> => {
     await addDoc(collection(fireStore, 'contents'), {
       title: input,
       name: auth.currentUser.email,
@@ -80,6 +88,17 @@ export default function Todo() {
       setInput('');
       getContents();
     });
+  };
+
+  const getfriends = async (): Promise<void> => {
+    const username = auth.currentUser.email;
+
+    const friends = await getDocs(collection(fireStore, 'friend'));
+    const filteredF = friends.docs
+      .filter((u) => u.data().user === username || u.data().friend === username)
+      .map((u) => (u.data().user === username ? u.data().friend : u.data().user));
+
+    setFriends(filteredF);
   };
 
   const getContents = async (): Promise<void> => {
@@ -103,6 +122,7 @@ export default function Todo() {
 
   useEffect(() => {
     getContents();
+    getfriends();
   }, []);
 
   return (
@@ -112,23 +132,33 @@ export default function Todo() {
           value={input}
           placeholder="Add To do"
           onChange={inputOnChange}
-          onPressEnter={plusOnClick}
+          onPressEnter={addContents}
           addonBefore={<DatePick onChange={onChange} />}
-          addonAfter={<PlusIcon onClick={plusOnClick} />}
+          addonAfter={<PlusIcon onClick={addContents} />}
         />
 
         {contents &&
-          contents.map((c, i) => (
-            <ContentWrapper key={i}>
-              <DateWrapper>
-                <CheckState onClick={() => handleUpdate(c.id as string, c.data().state)} checked={c.data().state} />
-                <Content state={c.data().state}>{dayjs(c.data().date).format('YY-MM-DD')}</Content>
-                <Content state={c.data().state}>{c.data().name?.split('@')[0]}</Content>
-              </DateWrapper>
-              <Content state={c.data().state}>{c.data().title}</Content>
-              <DeleteIcon onClick={() => handleDelete(c.id as string)} />
-            </ContentWrapper>
-          ))}
+          contents.map((c) => {
+            if (friends.includes(c.data().name) || auth.currentUser.email === c.data().name) {
+              return (
+                <ContentWrapper key={c.id}>
+                  <EmailWrapper>
+                    <DateWrapper>
+                      <CheckState
+                        onClick={() => handleUpdate(c.id as string, c.data().state)}
+                        checked={c.data().state}
+                      />
+                      <Content state={c.data().state}>{dayjs(c.data().date).format('YY-MM-DD')}</Content>
+                    </DateWrapper>
+                    <Content state={c.data().state}>{c.data().name?.split('@')[0]}</Content>
+                  </EmailWrapper>
+                  <Content state={c.data().state}>{c.data().title}</Content>
+                  <DeleteIcon onClick={() => handleDelete(c.id as string)} />
+                </ContentWrapper>
+              );
+            }
+            return null;
+          })}
       </InputWrapper>
     </React.Fragment>
   );
