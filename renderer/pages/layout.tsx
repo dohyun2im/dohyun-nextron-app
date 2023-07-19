@@ -3,7 +3,14 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { auth } from '../firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { CommentOutlined, LoginOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  CommentOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  UserAddOutlined,
+  UserOutlined,
+  WhatsAppOutlined,
+} from '@ant-design/icons';
 import { Avatar } from 'antd';
 
 const Container = styled.div`
@@ -81,6 +88,11 @@ const ChatIcon = styled(CommentOutlined)`
   padding-bottom: 10px;
 `;
 
+const CallIcon = styled(WhatsAppOutlined)`
+  font-size: 18px;
+  padding-bottom: 10px;
+`;
+
 const SignUpIcon = styled(UserAddOutlined)`
   font-size: 18px;
   padding-bottom: 10px;
@@ -120,6 +132,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             <SideBarTabsItem onClick={() => handleRouter('chat')}>
               <ChatIcon />
               <div>Chat</div>
+            </SideBarTabsItem>
+            <SideBarTabsItem onClick={() => handleRouter('call')}>
+              <CallIcon />
+              <div>Call</div>
             </SideBarTabsItem>
             <SideBarTabsItem onClick={onLogOutClick}>
               <LogoutIcon />
