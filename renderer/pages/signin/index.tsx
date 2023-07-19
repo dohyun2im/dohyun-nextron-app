@@ -13,6 +13,7 @@ const HeaderWrapper = styled.div`
 `;
 
 const FormWrapper = styled.div`
+  width: 100%;
   padding: 24px;
 `;
 
@@ -41,7 +42,7 @@ export default function SignIn() {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       const store = new Store();
-      store.set('email',values.email as string);
+      store.set('email', values.email as string);
       store.set('pw', values.password as string);
       form.resetFields();
     } catch (err) {

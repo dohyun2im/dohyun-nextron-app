@@ -1,13 +1,10 @@
-import { CloseCircleOutlined, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, PlusCircleOutlined, UserAddOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
-import { Collapse, Input, message } from 'antd';
+import { Collapse, Input, message, Modal } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-
-const InputWrapper = styled.div`
-  padding: 10px;
-`;
+import { PlusIcon } from '../../styles';
 
 const EmailWrapper = styled.div`
   padding: 10px;
@@ -19,10 +16,11 @@ const TeamsInput = styled(Input)`
   .ant-input-group-addon {
     background-color: white !important;
   }
-  margin-bottom: 30px;
+  margin-top: 10px;
 `;
 
 const TeamsCollapse = styled(Collapse)`
+  width: 100%;
   .ant-collapse-arrow,
   .ant-collapse-header-text,
   .ant-collapse-content-box {
@@ -39,11 +37,6 @@ const TeamsCollapse = styled(Collapse)`
   }
 `;
 
-const PlusIcon = styled(PlusOutlined)`
-  background-color: white;
-  font-size: 20px;
-`;
-
 const CloseIcon = styled(CloseCircleOutlined)`
   color: white;
   font-size: 20px;
@@ -55,6 +48,18 @@ const AddUserIcon = styled(UserAddOutlined)`
   margin: 5px 12.5px 5px 12.5px;
 `;
 
+const BlackPlusIcon = styled(PlusCircleOutlined)`
+  background-color: #222222;
+  color: white;
+  font-size: 22px;
+  margin-left: 5px;
+`;
+
+const CollapseLabel = styled.span`
+  display: flex;
+  align-items: center;
+`;
+
 interface frined {
   id: string;
   name: string;
@@ -62,8 +67,18 @@ interface frined {
 
 export default function Teams() {
   const [input, setInput] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [friends, setFriends] = useState<frined[]>([{ id: '0', name: 'No friends' }]);
   const [messageApi, contextHolder] = message.useMessage();
+
+  const showModal = (e:any) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
+  };
+
+  const handleClose = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
 
   const warningMsg = useCallback(() => {
     messageApi.warning('존재하지 않는 사용자 입니다.');
@@ -105,6 +120,7 @@ export default function Teams() {
       getfriends();
       successMsg();
       setInput('');
+      handleClose();
     });
   };
 
@@ -126,14 +142,13 @@ export default function Teams() {
     await deleteDoc(doc(fireStore, 'friend', id)).then(() => getfriends());
   };
 
-  useEffect(() => {
-    getfriends();
-  }, []);
-
-  return (
+  const AddfriendModal = () => (
     <React.Fragment>
-      {contextHolder}
-      <InputWrapper>
+      <CollapseLabel>
+        Teams
+        <BlackPlusIcon onClick={showModal} />
+      </CollapseLabel>
+      <Modal title="Add friend" open={isModalOpen} onCancel={handleClose} footer={[]}>
         <TeamsInput
           value={input}
           placeholder="example.gmail.com"
@@ -142,14 +157,24 @@ export default function Teams() {
           addonBefore={<AddUserIcon />}
           addonAfter={<PlusIcon onClick={addFriend} />}
         />
-      </InputWrapper>
+      </Modal>
+    </React.Fragment>
+  );
+
+  useEffect(() => {
+    getfriends();
+  }, []);
+
+  return (
+    <React.Fragment>
+      {contextHolder}
       <TeamsCollapse
         ghost
         defaultActiveKey={['1']}
         items={[
           {
             key: '1',
-            label: 'Teams',
+            label: <AddfriendModal />,
             children: friends.map((f: frined) => (
               <EmailWrapper key={f.id}>
                 <span>{f.name}</span>

@@ -14,6 +14,7 @@ const HeaderWrapper = styled.div`
 `;
 
 const FormWrapper = styled.div`
+  width: 100%;
   padding: 24px;
 `;
 

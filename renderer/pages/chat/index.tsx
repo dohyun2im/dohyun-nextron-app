@@ -5,8 +5,10 @@ import React, { useEffect, useState } from 'react';
 import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import dayjs from 'dayjs';
+import { PlusIcon } from '../../styles';
 
 const InputWrapper = styled.div`
+  width: 100%;
   padding: 10px;
   overflow-y: auto;
 `;
@@ -55,11 +57,6 @@ const DatePick = styled(DatePicker)`
   .ant-picker-focused {
     border: none !important;
   }
-`;
-
-const PlusIcon = styled(PlusOutlined)`
-  background-color: white;
-  font-size: 20px;
 `;
 
 const DeleteIcon = styled(DeleteOutlined)`

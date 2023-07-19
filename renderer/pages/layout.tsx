@@ -1,120 +1,149 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { auth } from '../firebase/firebase';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { LoginOutlined, LogoutOutlined, UnorderedListOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import { onAuthStateChanged } from 'firebase/auth';
+import { CommentOutlined, LoginOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar } from 'antd';
 
 const TopWrapper = styled.div`
   width: 100vw;
-  height: 95vh;
-`;
-
-const BottomWrapper = styled.div`
-  width: 100vw;
-  height: 5vh;
-  border-top: 1px solid #eee;
+  height: 42px;
   display: flex;
   align-items: center;
 `;
+const SideTabsContainer = styled.div`
+  width: 90vw;
+  height: 92vh;
+  padding: 10px;
+  display: flex;
+`;
 
-const Header = styled.div`
+const SideTabsWrapper = styled.div`
+  width: 10vw;
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px;
+`;
+
+const SideBarTabsItem = styled.span`
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  padding: 7px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  :hover {
+    scale: 1.07;
+    background-color: #737373;
+  }
+`;
+
+const Logo = styled.div`
   font-size: 16px;
   font-weight: 600;
   color: #fff;
-  padding: 10px;
+  padding: 10px 0px 10px 10px;
+  margin-top: 7px;
 `;
 
-const BottomItem = styled.span`
-  width: 50%;
+const UserAvatar = styled(Avatar)`
+  width: 34px;
+  height: 34px;
+  background-color: #fde3cf;
+  color: #f56a00;
+  font-weight: bold;
+  margin: 7px 7px 0px 21px;
+`;
+
+const UserIcon = styled(UserOutlined)`
   font-size: 18px;
-  font-weight: 500;
-  color: white;
-  text-align: center;
+  padding-bottom: 10px;
 `;
 
-const LoggedInBottomItem = styled.span`
-  width: 33.3%;
+const LoginIcon = styled(LoginOutlined)`
   font-size: 18px;
-  font-weight: 500;
-  color: white;
-  text-align: center;
+  padding-bottom: 10px;
 `;
 
-const BottomBorder = styled.span`
-  height: 5vh;
-  border-left: 1px solid #eee;
+const LogoutIcon = styled(LogoutOutlined)`
+  font-size: 18px;
+  padding-bottom: 10px;
+`;
+
+const ChatIcon = styled(CommentOutlined)`
+  font-size: 18px;
+  padding-bottom: 10px;
+`;
+
+const SignUpIcon = styled(UserAddOutlined)`
+  font-size: 18px;
+  padding-bottom: 10px;
 `;
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [user, setUser] = useState<boolean>(false);
+
   const handleRouter = (route: string) => {
     router.push(`/${route}`);
   };
 
-  const onLogOutClick = () => {
+  const onLogOutClick = useCallback(() => {
     auth.signOut();
     router.push('/signin');
-  };
+  }, []);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(true);
-      } else {
-        setUser(false);
-      }
+      if (user) setUser(true);
+      else setUser(false);
     });
   }, [auth]);
 
   return (
     <>
       <TopWrapper>
-        {user && <Header>{auth.currentUser.email.split('@')[0]} 님 . </Header>}
-        {children}
+        {user && <UserAvatar>{auth.currentUser.email.slice(0, 2)}</UserAvatar>}
+        <Logo>Slack & Zoom</Logo>
       </TopWrapper>
-      {user ? (
-        <BottomWrapper>
-          <LoggedInBottomItem
-            onClick={() => {
-              handleRouter('teams');
-            }}
-          >
-            <UserOutlined /> Teams
-          </LoggedInBottomItem>
-          <BottomBorder />
-          <LoggedInBottomItem
-            onClick={() => {
-              handleRouter('todo');
-            }}
-          >
-            <UnorderedListOutlined /> Todo
-          </LoggedInBottomItem>
-          <BottomBorder />
-          <LoggedInBottomItem onClick={onLogOutClick}>
-            <LogoutOutlined /> Logout
-          </LoggedInBottomItem>
-        </BottomWrapper>
-      ) : (
-        <BottomWrapper>
-          <BottomItem
-            onClick={() => {
-              handleRouter('signin');
-            }}
-          >
-            <LoginOutlined /> Login
-          </BottomItem>
-          <BottomBorder />
-          <BottomItem
-            onClick={() => {
-              handleRouter('signup');
-            }}
-          >
-            <UserAddOutlined /> Sign Up
-          </BottomItem>
-        </BottomWrapper>
-      )}
+      <SideTabsContainer>
+        <SideTabsWrapper>
+          {user ? (
+            <>
+              <SideBarTabsItem onClick={() => handleRouter('teams')}>
+                <UserIcon />
+                <div>Teams</div>
+              </SideBarTabsItem>
+              <SideBarTabsItem onClick={() => handleRouter('chat')}>
+                <ChatIcon />
+                <div>Chat</div>
+              </SideBarTabsItem>
+              <SideBarTabsItem onClick={onLogOutClick}>
+                <LogoutIcon />
+                <div>Logout</div>
+              </SideBarTabsItem>
+            </>
+          ) : (
+            <>
+              <SideBarTabsItem onClick={() => handleRouter('signin')}>
+                <LoginIcon />
+                <div>Login</div>
+              </SideBarTabsItem>
+              <SideBarTabsItem onClick={() => handleRouter('signup')}>
+                <SignUpIcon />
+                <div>Sign Up</div>
+              </SideBarTabsItem>
+            </>
+          )}
+        </SideTabsWrapper>
+        {children}
+      </SideTabsContainer>
     </>
   );
 }
