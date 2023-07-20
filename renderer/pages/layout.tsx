@@ -103,7 +103,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<boolean>(false);
 
   const handleRouter = (route: string) => {
-    router.push(`/${route}`);
+    router.push(`${route}`);
   };
 
   const onLogOutClick = useCallback(() => {
@@ -122,18 +122,18 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <Container>
       <SideTabsWrapper>
         {user && <UserAvatar>{auth.currentUser.email.slice(0, 2)}</UserAvatar>}
-        <Logo>SlackZoom</Logo>
+        <Logo onClick={() => handleRouter('/home')}>SlackZoom</Logo>
         {user ? (
           <>
-            <SideBarTabsItem onClick={() => handleRouter('teams')}>
+            <SideBarTabsItem onClick={() => handleRouter('/teams')}>
               <UserIcon />
               <div>Teams</div>
             </SideBarTabsItem>
-            <SideBarTabsItem onClick={() => handleRouter('chat')}>
+            <SideBarTabsItem onClick={() => handleRouter('/chat')}>
               <ChatIcon />
               <div>Chat</div>
             </SideBarTabsItem>
-            <SideBarTabsItem onClick={() => handleRouter('call')}>
+            <SideBarTabsItem onClick={() => handleRouter('/call')}>
               <CallIcon />
               <div>Call</div>
             </SideBarTabsItem>
@@ -144,11 +144,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </>
         ) : (
           <>
-            <SideBarTabsItem onClick={() => handleRouter('signin')}>
+            <SideBarTabsItem onClick={() => handleRouter('/signin')}>
               <LoginIcon />
               <div>Login</div>
             </SideBarTabsItem>
-            <SideBarTabsItem onClick={() => handleRouter('signup')}>
+            <SideBarTabsItem onClick={() => handleRouter('/signup')}>
               <SignUpIcon />
               <div>Sign Up</div>
             </SideBarTabsItem>
