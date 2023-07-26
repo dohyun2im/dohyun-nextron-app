@@ -5,11 +5,13 @@ import { auth } from '../../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Store from 'electron-store';
 import { FormButton, FormItem, FormWrapper, HeaderWrapper } from '../../styles';
+import { useRouter } from 'next/router';
 
 export default function SignIn() {
   const [form] = Form.useForm();
   const [button, setButton] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const router = useRouter();
 
   const errorMsg = (m: string) => {
     messageApi.destroy();
@@ -24,6 +26,7 @@ export default function SignIn() {
       store.set('email', values.email as string);
       store.set('pw', values.password as string);
       form.resetFields();
+      router.push('/home');
     } catch (err) {
       setButton(false);
       switch (err.code) {

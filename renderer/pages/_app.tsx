@@ -11,7 +11,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const store = new Store();
 
   const handleLogin = async() => {
-    await signInWithEmailAndPassword(auth, store.get('email') as string, store.get('pw') as string);
+    const email = store.get('email') as string;
+    const pw = store.get('pw') as string;
+    if (email && pw) {
+      await signInWithEmailAndPassword(auth, email, pw);
+    }
   };
 
   useEffect(() => {

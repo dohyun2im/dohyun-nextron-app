@@ -23,6 +23,9 @@ NEXT_PUBLIC_ENV_FIREBASE_APP_ID=
 ### Use it
 
 ```
+#install
+$ yarn 
+
 # development mode
 $ yarn dev (or `npm run dev` or `pnpm run dev`)
 
