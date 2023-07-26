@@ -1,13 +1,7 @@
 import React from 'react';
 import { Result } from 'antd';
-import styled from '@emotion/styled';
 import Image from 'next/image';
-
-const TitleWrapper = styled.div`
-  color: #fff;
-  font-weight: bold;
-  font-size: 26px;
-`;
+import { TitleWrapper } from '../styles';
 
 export default function Home() {
   return (

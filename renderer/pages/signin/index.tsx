@@ -1,31 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
-import styled from '@emotion/styled';
+import { Form, Input, message } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { auth } from '../../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import Store from 'electron-store';
-
-const HeaderWrapper = styled.div`
-  text-align: center;
-  color: white;
-  margin-bottom: 70px;
-`;
-
-const FormWrapper = styled.div`
-  width: 100%;
-  padding: 24px;
-`;
-
-const FormItem = styled(Form.Item)`
-  margin-bottom: 35px;
-`;
-
-const FormButton = styled(Button)`
-  border: none;
-  background-color: gray;
-  color: white;
-`;
+import { FormButton, FormItem, FormWrapper, HeaderWrapper } from '../../styles';
 
 export default function SignIn() {
   const [form] = Form.useForm();

@@ -1,102 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { auth } from '../firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
-  CommentOutlined,
-  LoginOutlined,
-  LogoutOutlined,
-  UserAddOutlined,
-  UserOutlined,
-  WhatsAppOutlined,
-} from '@ant-design/icons';
-import { Avatar } from 'antd';
-
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  padding: 10px;
-  display: flex;
-`;
-
-const SideTabsWrapper = styled.div`
-  width: 10vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  padding: 10px;
-`;
-
-const ChildrenWrapper = styled.div`
-  width: 84vw;
-  height: 100vh;
-  padding: 10px;
-`;
-
-const SideBarTabsItem = styled.span`
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-  padding: 7px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  :hover {
-    scale: 1.07;
-    background-color: #737373;
-  }
-`;
-
-const Logo = styled.div`
-  font-size: 16px;
-  font-weight: 600;
-  color: #fff;
-  padding: 10px 0px 10px 10px;
-  margin: 7px 0px 21px 0px;
-`;
-
-const UserAvatar = styled(Avatar)`
-  width: 34px;
-  height: 34px;
-  background-color: #fde3cf;
-  color: #f56a00;
-  font-weight: bold;
-  margin-top: 7px;
-`;
-
-const UserIcon = styled(UserOutlined)`
-  font-size: 18px;
-  padding-bottom: 10px;
-`;
-
-const LoginIcon = styled(LoginOutlined)`
-  font-size: 18px;
-  padding-bottom: 10px;
-`;
-
-const LogoutIcon = styled(LogoutOutlined)`
-  font-size: 18px;
-  padding-bottom: 10px;
-`;
-
-const ChatIcon = styled(CommentOutlined)`
-  font-size: 18px;
-  padding-bottom: 10px;
-`;
-
-const CallIcon = styled(WhatsAppOutlined)`
-  font-size: 18px;
-  padding-bottom: 10px;
-`;
-
-const SignUpIcon = styled(UserAddOutlined)`
-  font-size: 18px;
-  padding-bottom: 10px;
-`;
+  CallIcon,
+  ChatIcon,
+  ChildrenWrapper,
+  Container,
+  LoginIcon,
+  Logo,
+  LogoutIcon,
+  SideBarTabsItem,
+  SideTabsWrapper,
+  SignUpIcon,
+  UserAvatar,
+  UserIcon,
+} from '../styles';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

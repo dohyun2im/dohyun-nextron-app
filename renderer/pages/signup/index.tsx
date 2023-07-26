@@ -1,38 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message } from 'antd';
+import { Form, Input, message } from 'antd';
 import { CheckOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
-import styled from '@emotion/styled';
-import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, fireStore } from '../../firebase/firebase';
-import { useRouter } from 'next/router';
 import { addDoc, collection } from 'firebase/firestore';
-
-const HeaderWrapper = styled.div`
-  text-align: center;
-  color: white;
-  margin-bottom: 70px;
-`;
-
-const FormWrapper = styled.div`
-  width: 100%;
-  padding: 24px;
-`;
-
-const FormItem = styled(Form.Item)`
-  margin-bottom: 35px;
-`;
-
-const FormButton = styled(Button)`
-  border: none;
-  background-color: gray;
-  color: white;
-`;
+import { FormButton, FormItem, FormWrapper, HeaderWrapper } from '../../styles';
 
 export default function SignUp() {
   const [form] = Form.useForm();
   const [button, setButton] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const router = useRouter();
 
   const errorMsg = (m: string) => {
     messageApi.destroy();

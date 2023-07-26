@@ -1,69 +1,18 @@
-import { CloseCircleOutlined, PlusCircleOutlined, UserAddOutlined } from '@ant-design/icons';
-import styled from '@emotion/styled';
-import { Collapse, Input, message, Modal } from 'antd';
+import { message, Modal } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { PlusIcon } from '../../styles';
-
-const EmailWrapper = styled.div`
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const TeamsInput = styled(Input)`
-  .ant-input-group-addon {
-    background-color: white !important;
-  }
-  margin-top: 10px;
-`;
-
-const TeamsCollapse = styled(Collapse)`
-  width: 100%;
-  .ant-collapse-arrow,
-  .ant-collapse-header-text,
-  .ant-collapse-content-box {
-    color: white !important;
-    font-weight: 600;
-  }
-  .ant-collapse-content-box {
-    border-bottom: 1px solid #eee;
-  }
-  .ant-collapse-header {
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    border-radius: 0px !important;
-  }
-`;
-
-const CloseIcon = styled(CloseCircleOutlined)`
-  color: white;
-  font-size: 20px;
-`;
-
-const AddUserIcon = styled(UserAddOutlined)`
-  font-size: 16px;
-  color: lightgray;
-  margin: 5px 12.5px 5px 12.5px;
-`;
-
-const BlackPlusIcon = styled(PlusCircleOutlined)`
-  background-color: #222222;
-  color: white;
-  font-size: 22px;
-  margin-left: 5px;
-`;
-
-const CollapseLabel = styled.span`
-  display: flex;
-  align-items: center;
-`;
-
-interface frined {
-  id: string;
-  name: string;
-}
+import {
+  AddUserIcon,
+  BlackPlusIcon,
+  CloseIcon,
+  CollapseLabel,
+  EmailWrapper,
+  PlusIcon,
+  TeamsCollapse,
+  TeamsInput,
+} from '../../styles';
+import { frined } from '../../types';
 
 export default function Teams() {
   const [input, setInput] = useState<string>('');
@@ -71,7 +20,7 @@ export default function Teams() {
   const [friends, setFriends] = useState<frined[]>([{ id: '0', name: 'No friends' }]);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const showModal = (e:any) => {
+  const showModal = (e: any) => {
     e.stopPropagation();
     setIsModalOpen(true);
   };

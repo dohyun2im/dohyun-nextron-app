@@ -1,71 +1,22 @@
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import styled from '@emotion/styled';
-import { Checkbox, DatePicker, DatePickerProps, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { DatePickerProps } from 'antd';
 import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import dayjs from 'dayjs';
-import { PlusIcon } from '../../styles';
+import {
+  ChatEmailWrapper,
+  ChatInput,
+  CheckState,
+  Content,
+  ContentWrapper,
+  DatePick,
+  DateWrapper,
+  DeleteIcon,
+  InputWrapper,
+  PlusIcon,
+} from '../../styles';
 
-const InputWrapper = styled.div`
-  width: 100%;
-  padding: 10px;
-  overflow-y: auto;
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 15px;
-`;
-
-const EmailWrapper = styled.div`
-  min-width: 260px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const DateWrapper = styled.div`
-  min-width: 90px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Content = styled.div<{ state: boolean }>`
-  text-decoration: ${(p) => (p.state ? 'line-through' : 'none')};
-  font-size: 18px;
-  font-weight: 600;
-  color: ${(p) => (p.state ? 'orange' : 'white')};
-`;
-
-const TeamsInput = styled(Input)`
-  .ant-input-group-addon {
-    background-color: white !important;
-  }
-  margin-bottom: 30px;
-`;
-
-const CheckState = styled(Checkbox)`
-  margin-left: 3px;
-  margin-right: 6px;
-`;
-
-const DatePick = styled(DatePicker)`
-  border: none;
-  .ant-picker-focused {
-    border: none !important;
-  }
-`;
-
-const DeleteIcon = styled(DeleteOutlined)`
-  font-size: 20px;
-  margin-right: 5px;
-  margin-bottom: 3px;
-`;
-
-export default function Todo() {
+export default function Chat() {
   const [input, setInput] = useState<string>('');
   const [friends, setFriends] = useState<string[]>([]);
   const [date, setDate] = useState<string>(dayjs(new Date()).format('YYYY-MM-DD'));
@@ -125,7 +76,7 @@ export default function Todo() {
   return (
     <React.Fragment>
       <InputWrapper>
-        <TeamsInput
+        <ChatInput
           value={input}
           placeholder="Add To do"
           onChange={inputOnChange}
@@ -139,7 +90,7 @@ export default function Todo() {
             if (friends.includes(c.data().name) || auth.currentUser.email === c.data().name) {
               return (
                 <ContentWrapper key={c.id}>
-                  <EmailWrapper>
+                  <ChatEmailWrapper>
                     <DateWrapper>
                       <CheckState
                         onClick={() => handleUpdate(c.id as string, c.data().state)}
@@ -148,7 +99,7 @@ export default function Todo() {
                       <Content state={c.data().state}>{dayjs(c.data().date).format('YY-MM-DD')}</Content>
                     </DateWrapper>
                     <Content state={c.data().state}>{c.data().name?.split('@')[0]}</Content>
-                  </EmailWrapper>
+                  </ChatEmailWrapper>
                   <Content state={c.data().state}>{c.data().title}</Content>
                   <DeleteIcon onClick={() => handleDelete(c.id as string)} />
                 </ContentWrapper>
