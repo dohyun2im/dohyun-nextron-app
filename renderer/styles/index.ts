@@ -9,6 +9,8 @@ import {
   CloseCircleOutlined,
   PlusCircleOutlined,
   DeleteOutlined,
+  UsergroupAddOutlined,
+  SendOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Checkbox, Collapse, DatePicker, Form, Input } from 'antd';
 import styled from '@emotion/styled';
@@ -123,8 +125,19 @@ export const TeamsCollapse = styled(Collapse)`
   }
 `;
 
+export const SendIcon = styled(SendOutlined)`
+  color: white;
+  font-size: 20px;
+`;
+
+export const ChannelIcon = styled(UsergroupAddOutlined)`
+  color: white;
+  font-size: 22px;
+`;
+
 export const CloseIcon = styled(CloseCircleOutlined)`
   color: white;
+  margin-left: 7px;
   font-size: 20px;
 `;
 

@@ -16,7 +16,7 @@ import {
   PlusIcon,
 } from '../../styles';
 
-export default function Chat() {
+export default function Channel() {
   const [input, setInput] = useState<string>('');
   const [friends, setFriends] = useState<string[]>([]);
   const [date, setDate] = useState<string>(dayjs(new Date()).format('YYYY-MM-DD'));

@@ -4,12 +4,14 @@ import { auth } from '../firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   CallIcon,
+  ChannelIcon,
   ChatIcon,
   ChildrenWrapper,
   Container,
   LoginIcon,
   Logo,
   LogoutIcon,
+  SendIcon,
   SideBarTabsItem,
   SideTabsWrapper,
   SignUpIcon,
@@ -44,13 +46,17 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <Logo onClick={() => handleRouter('/home')}>SlackZoom</Logo>
         {user ? (
           <>
-            <SideBarTabsItem onClick={() => handleRouter('/teams')}>
+            <SideBarTabsItem onClick={() => handleRouter('/friends')}>
               <UserIcon />
-              <div>Teams</div>
+              <div>Friends</div>
             </SideBarTabsItem>
-            <SideBarTabsItem onClick={() => handleRouter('/chat')}>
-              <ChatIcon />
-              <div>Chat</div>
+            <SideBarTabsItem onClick={() => handleRouter('/dm')}>
+              <SendIcon />
+              <div>DM</div>
+            </SideBarTabsItem>
+            <SideBarTabsItem onClick={() => handleRouter('/channel')}>
+              <ChannelIcon />
+              <div>Channel</div>
             </SideBarTabsItem>
             <SideBarTabsItem onClick={() => handleRouter('/call')}>
               <CallIcon />

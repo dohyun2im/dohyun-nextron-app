@@ -1,33 +1,28 @@
 import { message, Modal } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, fireStore } from '../../firebase/firebase';
-import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import {
-  AddUserIcon,
-  BlackPlusIcon,
-  CloseIcon,
-  CollapseLabel,
-  EmailWrapper,
-  PlusIcon,
-  TeamsCollapse,
-  TeamsInput,
-} from '../../styles';
-import { frined } from '../../types';
+import { AddUserIcon, BlackPlusIcon, CollapseLabel, PlusIcon, TeamsInput } from '../../styles';
 
-export default function Teams() {
+interface Props {
+  getFriends: () => Promise<void>;
+}
+export default function AddFriendModal({ getFriends }: Props) {
   const [input, setInput] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [friends, setFriends] = useState<frined[]>([{ id: '0', name: 'No friends' }]);
   const [messageApi, contextHolder] = message.useMessage();
 
   const showModal = (e: any) => {
     e.stopPropagation();
+    e.preventDefault();
     setIsModalOpen(true);
   };
 
-  const handleClose = useCallback(() => {
+  const handleClose = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
     setIsModalOpen(false);
-  }, []);
+  };
 
   const warningMsg = useCallback(() => {
     messageApi.warning('존재하지 않는 사용자 입니다.');
@@ -51,6 +46,7 @@ export default function Teams() {
     const users = await getDocs(collection(fireStore, 'users'));
     const filteredU = users.docs.filter((u) => u.data().name === input);
     if (filteredU[0]?.data()?.name !== input || filteredU?.length !== 1) {
+      setInput('');
       warningMsg();
       return;
     }
@@ -58,43 +54,26 @@ export default function Teams() {
     const friends = await getDocs(collection(fireStore, 'friend'));
     const filteredF = friends.docs.filter((u) => u.data().user === username && u.data().friend === input);
     if (filteredF?.length > 0) {
+      setInput('');
       errorMsg();
       return;
     }
 
-    await addDoc(collection(fireStore, 'friend'), {
-      user: username,
-      friend: filteredU[0]?.data()?.name,
+    await addDoc(collection(fireStore, 'friends'), {
+      friends: [username, filteredU[0]?.data()?.name],
     }).then(() => {
-      getfriends();
+      getFriends();
       successMsg();
       setInput('');
-      handleClose();
+      setIsModalOpen(false);
     });
   };
 
-  const getfriends = async (): Promise<void> => {
-    const username = auth.currentUser.email;
-
-    const friends = await getDocs(collection(fireStore, 'friend'));
-    const filteredF = friends.docs
-      .filter((u) => u.data().user === username || u.data().friend === username)
-      .map((u) =>
-        u.data().user === username ? { id: u.id, name: u.data().friend } : { id: u.id, name: u.data().user },
-      );
-
-    if (filteredF?.length === 0) setFriends([{ id: '0', name: 'No friends' }]);
-    else setFriends(filteredF);
-  };
-
-  const deletefriends = async (id: string): Promise<void> => {
-    await deleteDoc(doc(fireStore, 'friend', id)).then(() => getfriends());
-  };
-
-  const AddfriendModal = () => (
+  return (
     <React.Fragment>
+      {contextHolder}
       <CollapseLabel>
-        Teams
+        Friends
         <BlackPlusIcon onClick={showModal} />
       </CollapseLabel>
       <Modal title="Add friend" open={isModalOpen} onCancel={handleClose} footer={[]}>
@@ -107,32 +86,6 @@ export default function Teams() {
           addonAfter={<PlusIcon onClick={addFriend} />}
         />
       </Modal>
-    </React.Fragment>
-  );
-
-  useEffect(() => {
-    getfriends();
-  }, []);
-
-  return (
-    <React.Fragment>
-      {contextHolder}
-      <TeamsCollapse
-        ghost
-        defaultActiveKey={['1']}
-        items={[
-          {
-            key: '1',
-            label: <AddfriendModal />,
-            children: friends.map((f: frined) => (
-              <EmailWrapper key={f.id}>
-                <span>{f.name}</span>
-                {f.id !== '0' && <CloseIcon onClick={() => deletefriends(f.id)} />}
-              </EmailWrapper>
-            )),
-          },
-        ]}
-      />
     </React.Fragment>
   );
 }
