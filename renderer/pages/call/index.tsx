@@ -4,7 +4,6 @@ import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
 import dayjs from 'dayjs';
 import {
-  ChatEmailWrapper,
   ChatInput,
   CheckState,
   Content,
@@ -90,7 +89,6 @@ export default function Call() {
             if (friends.includes(c.data().name) || auth.currentUser.email === c.data().name) {
               return (
                 <ContentWrapper key={c.id}>
-                  <ChatEmailWrapper>
                     <DateWrapper>
                       <CheckState
                         onClick={() => handleUpdate(c.id as string, c.data().state)}
@@ -99,7 +97,6 @@ export default function Call() {
                       <Content state={c.data().state}>{dayjs(c.data().date).format('YY-MM-DD')}</Content>
                     </DateWrapper>
                     <Content state={c.data().state}>{c.data().name?.split('@')[0]}</Content>
-                  </ChatEmailWrapper>
                   <Content state={c.data().state}>{c.data().title}</Content>
                   <DeleteIcon onClick={() => handleDelete(c.id as string)} />
                 </ContentWrapper>

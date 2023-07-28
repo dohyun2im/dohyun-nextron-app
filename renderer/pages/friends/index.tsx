@@ -55,6 +55,12 @@ export default function Friends() {
     await addDoc(collection(fireStore, 'dm'), {
       user: [username, friendName],
     }).then(() => {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification('SlackZoom', {
+          body: '대화방이 생성 되었습니다.',
+          icon: './logo.png',
+        });
+      }
       router.push('/dm');
     });
   };

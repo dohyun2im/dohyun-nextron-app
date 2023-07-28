@@ -23,8 +23,8 @@ if (isProd) {
     minWidth: 500,
     maxWidth: 1500,
     height: height,
-    minHeight: 500,
-    maxHeight: 1000,
+    minHeight: 600,
+    maxHeight: 1200,
     x: width - 600,
     y: 0,
   });
@@ -41,3 +41,4 @@ if (isProd) {
 app.on('window-all-closed', () => {
   app.quit();
 });
+

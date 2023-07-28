@@ -5,7 +5,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 import {
   CallIcon,
   ChannelIcon,
-  ChatIcon,
   ChildrenWrapper,
   Container,
   LoginIcon,
