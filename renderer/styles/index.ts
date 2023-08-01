@@ -16,7 +16,6 @@ import {
 import { Avatar, Button, Checkbox, Collapse, DatePicker, Form, Input } from 'antd';
 import styled from '@emotion/styled';
 
-
 // Wrappers
 export const InputWrapper = styled.div`
   width: 100%;
@@ -31,7 +30,6 @@ export const ContentWrapper = styled.div`
   align-items: center;
   padding-bottom: 15px;
 `;
-
 
 export const DateWrapper = styled.div`
   min-width: 90px;
@@ -64,6 +62,15 @@ export const TitleWrapper = styled.div`
   color: #fff;
   font-weight: bold;
   font-size: 26px;
+`;
+
+export const DmWrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
 `;
 
 export const SideTabsWrapper = styled.div`

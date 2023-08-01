@@ -1,24 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { auth, fireStore } from '../../firebase/firebase';
 import { addDoc, arrayUnion, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import {
-  EmailWrapper,
-  ExportIcon,
-  SendIcon,
-  TeamsCollapse,
-} from '../../styles';
-import styled from '@emotion/styled';
+import { EmailWrapper, ExportIcon, DmWrapper, SendIcon, TeamsCollapse } from '../../styles';
 import { Input } from 'antd';
-
-const MessageWrapper = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-  overflow-y: auto;
-  width: 100%;
-  height: 91%;
-`;
 
 export default function Dm() {
   const [dmRoom, setDmRoom] = useState<any>();
@@ -26,7 +10,7 @@ export default function Dm() {
   const [header, setHeader] = useState<string>('Direct Message');
   const [input, setInput] = useState<string>('');
   const [roomId, setRoomId] = useState<string>('');
-  
+
   const getDmRoom = async (): Promise<void> => {
     const username = auth.currentUser.email;
     await getDocs(query(collection(fireStore, 'dm'), where('user', 'array-contains-any', [username]))).then(
@@ -36,7 +20,7 @@ export default function Dm() {
     );
   };
 
-  const deleteDmRoom = async (e:any, id: string): Promise<void> => {
+  const deleteDmRoom = async (e: any, id: string): Promise<void> => {
     e.stopPropagation();
     e.preventDefault();
     await deleteDoc(doc(fireStore, 'dm', id)).then(() => getDmRoom());
@@ -58,7 +42,9 @@ export default function Dm() {
   };
 
   const handleSubmitMessage = async (): Promise<void> => {
-    await updateDoc(doc(fireStore, 'dm', roomId), { msgs: arrayUnion({ from: auth.currentUser.email, msg: input })}).then(() => {
+    await updateDoc(doc(fireStore, 'dm', roomId), {
+      msgs: arrayUnion({ from: auth.currentUser.email, msg: input }),
+    }).then(() => {
       setInput('');
       getDmRoom();
     });
@@ -73,7 +59,7 @@ export default function Dm() {
   }, []);
 
   return (
-    <React.Fragment>
+    <DmWrapper>
       <TeamsCollapse
         ghost
         activeKey={active}
@@ -97,15 +83,13 @@ export default function Dm() {
         ]}
       />
       {active.length === 0 && header !== 'Direct Message' && (
-        <MessageWrapper>
-          <Input
-            value={input}
-            onChange={handleInputOnChange}
-            onPressEnter={handleSubmitMessage}
-            addonAfter={<SendIcon onClick={handleSubmitMessage} />}
-          />
-        </MessageWrapper>
+        <Input
+          value={input}
+          onChange={handleInputOnChange}
+          onPressEnter={handleSubmitMessage}
+          addonAfter={<SendIcon onClick={handleSubmitMessage} />}
+        />
       )}
-    </React.Fragment>
+    </DmWrapper>
   );
 }
