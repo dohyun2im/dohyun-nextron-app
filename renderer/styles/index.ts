@@ -23,6 +23,57 @@ export const InputWrapper = styled.div`
   overflow-y: auto;
 `;
 
+export const DmWrapper = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+`;
+
+export const MsgsWrapper = styled.div`
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  margin: 10px 0px;
+
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #222222;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+`;
+
+export const MsgWrapper = styled.div`
+  display: flex;
+  padding: 3px;
+`;
+
+export const MsgContentWrapper = styled.div`
+  padding: 6px;
+  width: 100%;
+  white-space: pre-wrap;
+`;
+
+export const MsgDateWrapper = styled.span`
+  color: gray;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0px 5px;
+`;
+
 export const ContentWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -62,15 +113,6 @@ export const TitleWrapper = styled.div`
   color: #fff;
   font-weight: bold;
   font-size: 26px;
-`;
-
-export const DmWrapper = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  height: 100%;
 `;
 
 export const SideTabsWrapper = styled.div`
@@ -173,6 +215,10 @@ export const ChatInput = styled(Input)`
   margin-bottom: 30px;
 `;
 
+export const MsgInput = styled(Input)`
+  margin-bottom: 20px;
+`;
+
 export const TeamsInput = styled(Input)`
   .ant-input-group-addon {
     background-color: white !important;
@@ -270,6 +316,7 @@ export const UserAvatar = styled(Avatar)`
   height: 34px;
   background-color: #fde3cf;
   color: #f56a00;
+  font-size: 14px;
   font-weight: bold;
   margin-top: 7px;
 `;
