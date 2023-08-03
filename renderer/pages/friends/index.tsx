@@ -29,7 +29,8 @@ export default function Friends() {
   };
 
   const deleteFriends = async (id: string): Promise<void> => {
-    await deleteDoc(doc(fireStore, 'friend', id)).then(() => getFriends());
+    console.log(id);
+    await deleteDoc(doc(fireStore, 'friends', id)).then(() => getFriends());
   };
 
   const startSendFriend = async (friendName: string): Promise<void> => {

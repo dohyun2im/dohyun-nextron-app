@@ -33,7 +33,12 @@ export default function AddFriendModal({ getFriends }: Props) {
   }, []);
 
   const successMsg = useCallback(() => {
-    messageApi.success('친구 추가 되었습니다.');
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('SlackZoom', {
+        body: '친구 추가 되었습니다.',
+        icon: './logo.png',
+      });
+    }
   }, []);
 
   const inputOnChange = (e: any) => {
