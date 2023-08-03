@@ -56,8 +56,10 @@ export default function AddFriendModal({ getFriends }: Props) {
       return;
     }
 
-    const friends = await getDocs(collection(fireStore, 'friend'));
-    const filteredF = friends.docs.filter((u) => u.data().user === username && u.data().friend === input);
+    const friends = await getDocs(collection(fireStore, 'friends'));
+    const filteredF = friends.docs.filter(
+      (u) => u.data().friends.includes(username) && u.data().friends.includes(input),
+    );
     if (filteredF?.length > 0) {
       setInput('');
       errorMsg();
@@ -65,7 +67,7 @@ export default function AddFriendModal({ getFriends }: Props) {
     }
 
     await addDoc(collection(fireStore, 'friends'), {
-      friends: [username, filteredU[0]?.data()?.name],
+      friends: [username, input],
     }).then(() => {
       getFriends();
       successMsg();
