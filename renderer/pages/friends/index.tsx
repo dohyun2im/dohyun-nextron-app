@@ -5,6 +5,7 @@ import { CloseIcon, EmailWrapper, SendIcon, TeamsCollapse } from '../../styles';
 import { frined } from '../../types';
 import AddFriendModal from '../../components/friends/AddFriendModal';
 import { useRouter } from 'next/router';
+import { notificationMsg } from '../../utils';
 
 export default function Friends() {
   const [friends, setFriends] = useState<frined[]>([{ id: '0', name: 'No friends' }]);
@@ -29,7 +30,6 @@ export default function Friends() {
   };
 
   const deleteFriends = async (id: string): Promise<void> => {
-    console.log(id);
     await deleteDoc(doc(fireStore, 'friends', id)).then(() => getFriends());
   };
 
@@ -47,21 +47,14 @@ export default function Friends() {
     }
 
     if (hasData) {
-      console.log('return');
       router.push('/dm');
       return;
     }
 
-    console.log('Add');
     await addDoc(collection(fireStore, 'dm'), {
       user: [username, friendName],
     }).then(() => {
-      if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification('SlackZoom', {
-          body: '대화방이 생성 되었습니다.',
-          icon: './logo.png',
-        });
-      }
+      notificationMsg('대화방이 생성 되었습니다.');
       router.push('/dm');
     });
   };

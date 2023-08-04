@@ -10,15 +10,7 @@ import { auth } from '../firebase/firebase';
 function MyApp({ Component, pageProps }: AppProps) {
   const store = new Store();
 
-  const handleLogin = async() => {
-    const email = store.get('email') as string;
-    const pw = store.get('pw') as string;
-    if (email && pw) {
-      await signInWithEmailAndPassword(auth, email, pw);
-    }
-  };
-
-  const requestNotificationPermission = () => {
+  useEffect(() => {
     if ('Notification' in window) {
       Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
@@ -30,10 +22,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     } else {
       console.error('이 브라우저는 알림을 지원하지 않습니다.');
     }
-  }
 
-  useEffect(() => {
-    requestNotificationPermission();
+    const handleLogin = async (): Promise<void> => {
+      const email = store.get('email') as string;
+      const pw = store.get('pw') as string;
+      if (email && pw) {
+        await signInWithEmailAndPassword(auth, email, pw);
+      }
+    };
+  
     handleLogin();
   }, []);
 

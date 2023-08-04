@@ -7,7 +7,6 @@ import {
   deleteDoc,
   doc,
   getDocs,
-  limit,
   onSnapshot,
   query,
   updateDoc,
@@ -26,7 +25,7 @@ import {
   MsgContentWrapper,
   MsgDateWrapper,
 } from '../../styles';
-import { formatTimestampToTimeString } from '../../utils';
+import { formatTimestampToTimeString, notificationMsg } from '../../utils';
 import { Message } from '../../types';
 
 export default function Dm() {
@@ -36,8 +35,9 @@ export default function Dm() {
   const [input, setInput] = useState<string>('');
   const [roomId, setRoomId] = useState<string>('');
   const [msgs, setMsgs] = useState<Message[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const mRef = useRef<HTMLDivElement | null>(null);
-  const username = auth.currentUser.email;
+  const username = auth?.currentUser?.email;
 
   const getDmRoom = async (): Promise<void> => {
     await getDocs(query(collection(fireStore, 'dm'), where('user', 'array-contains-any', [username]))).then(
@@ -52,7 +52,10 @@ export default function Dm() {
     e.preventDefault();
     setMsgs([]);
     setRoomId('');
-    await deleteDoc(doc(fireStore, 'dm', id)).then(() => getDmRoom());
+    await deleteDoc(doc(fireStore, 'dm', id)).then(() => {
+      notificationMsg('대화방이 삭제 되었습니다.');
+      getDmRoom();
+    });
   };
 
   const collapseOnchange = (key: string[]): void => {
@@ -66,7 +69,6 @@ export default function Dm() {
 
   const handleEmailClick = (id: string, email: string): void => {
     if (header !== `${email} 님과 대화`) {
-      console.log('이메일');
       setHeader(`${email} 님과 대화`);
       setRoomId(id);
       setActive([]);
@@ -81,11 +83,14 @@ export default function Dm() {
   };
 
   const handleSubmitMessage = async (): Promise<void> => {
+    if (!input || input.trim() === '' || loading) return;
+    setLoading(true);
+
     await updateDoc(doc(fireStore, 'dm', roomId), {
       msgs: arrayUnion({ from: auth.currentUser.email, msg: input, createAt: Timestamp.fromDate(new Date()) }),
     }).then(() => {
       setInput('');
-      getDmRoom();
+      setLoading(false);
       if (mRef.current) mRef.current.scrollTop = mRef.current.scrollHeight;
     });
   };
@@ -99,8 +104,9 @@ export default function Dm() {
   }, []);
 
   useEffect(() => {
-    if (!roomId) return;
-    onSnapshot(doc(fireStore, 'dm', roomId), (qs) => setMsgs(qs.data().msgs));
+    if (roomId !== '') {
+      onSnapshot(doc(fireStore, 'dm', roomId), (qs) => setMsgs(qs.data()?.msgs));
+    }
   }, [roomId]);
 
   return (

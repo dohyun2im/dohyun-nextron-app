@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { auth, fireStore } from '../../firebase/firebase';
 import { AddUserIcon, BlackPlusIcon, CollapseLabel, PlusIcon, TeamsInput } from '../../styles';
+import { notificationMsg } from '../../utils';
 
 interface Props {
   getFriends: () => Promise<void>;
@@ -24,6 +25,10 @@ export default function AddFriendModal({ getFriends }: Props) {
     setIsModalOpen(false);
   };
 
+  const warningTrim = useCallback(() => {
+    messageApi.warning('이메일을 입력 하세요.');
+  }, []);
+
   const warningMsg = useCallback(() => {
     messageApi.warning('존재하지 않는 사용자 입니다.');
   }, []);
@@ -33,12 +38,7 @@ export default function AddFriendModal({ getFriends }: Props) {
   }, []);
 
   const successMsg = useCallback(() => {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification('SlackZoom', {
-        body: '친구 추가 되었습니다.',
-        icon: './logo.png',
-      });
-    }
+    notificationMsg('친구 추가 되었습니다.');
   }, []);
 
   const inputOnChange = (e: any) => {
@@ -47,6 +47,11 @@ export default function AddFriendModal({ getFriends }: Props) {
 
   const addFriend = async (): Promise<void> => {
     const username = auth.currentUser.email;
+
+    if (!input || input.trim() === '' || input.trim().length < 7) {
+      warningTrim();
+      return;
+    }
 
     const users = await getDocs(collection(fireStore, 'users'));
     const filteredU = users.docs.filter((u) => u.data().name === input);

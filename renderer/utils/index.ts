@@ -12,3 +12,12 @@ export const formatTimestampToTimeString = (timestamp: number): string => {
 
   return timeString;
 };
+
+export const notificationMsg = (body: string): void => {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('SlackZoom', {
+      body,
+      icon: './logo.png',
+    });
+  }
+};
