@@ -25,7 +25,7 @@ import {
   MsgContentWrapper,
   MsgDateWrapper,
 } from '../../styles';
-import { formatTimestampToTimeString, notificationMsg } from '../../utils';
+import { formatTimestampToTimeString } from '../../utils';
 import { Message } from '../../types';
 
 export default function Dm() {
@@ -53,7 +53,6 @@ export default function Dm() {
     setMsgs([]);
     setRoomId('');
     await deleteDoc(doc(fireStore, 'dm', id)).then(() => {
-      notificationMsg('대화방이 삭제 되었습니다.');
       getDmRoom();
     });
   };

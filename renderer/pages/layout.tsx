@@ -53,6 +53,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <SendIcon />
               <div>DM</div>
             </SideBarTabsItem>
+            {/**
             <SideBarTabsItem onClick={() => handleRouter('/channel')}>
               <ChannelIcon />
               <div>Channel</div>
@@ -61,6 +62,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <CallIcon />
               <div>Call</div>
             </SideBarTabsItem>
+             */}
             <SideBarTabsItem onClick={onLogOutClick}>
               <LogoutIcon />
               <div>Logout</div>
